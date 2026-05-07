@@ -6,9 +6,7 @@
 //! Sweeps `n_fft in {256, 512, 1024}` and `hop in {n_fft/4, n_fft/2}`
 //! to cover both the mel-front-end hop and a pitch-shift-style 50% hop.
 
-mod common;
-
-use common::{
+use super::common::{
     client, dtype_f32, max_abs_diff, peak_abs, read_tensor, stft_cpu, synthesize_signal, upload_1d,
     upload_2d,
 };

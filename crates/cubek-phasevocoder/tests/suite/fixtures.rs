@@ -23,9 +23,7 @@ use std::path::PathBuf;
 
 use cubek_phasevocoder::phase_vocoder;
 
-mod common;
-
-use common::{client, dtype_f32, max_abs_diff, peak_abs, read_tensor, upload_1d, upload_3d};
+use super::common::{client, dtype_f32, max_abs_diff, peak_abs, read_tensor, upload_1d, upload_3d};
 
 struct Fixture {
     batch: usize,

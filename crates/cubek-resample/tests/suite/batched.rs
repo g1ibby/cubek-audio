@@ -4,9 +4,7 @@
 //! groups, runs each group through its resampler, then compares each
 //! group's output row-by-row against the CPU reference.
 
-mod common;
-
-use common::{
+use super::common::{
     Runtime, client, dtype_f32, max_abs_diff, peak_abs, read_tensor, resample_cpu, synth_reals,
     upload_2d,
 };

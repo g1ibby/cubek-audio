@@ -12,9 +12,7 @@
 //! boundary, excluding the replicate-padded edges where numerical precision
 //! is a little looser.
 
-mod common;
-
-use common::{Runtime, client, dtype_f32, read_tensor, upload_2d};
+use super::common::{Runtime, client, dtype_f32, read_tensor, upload_2d};
 use cubek_resample::Resampler;
 
 const BATCH: usize = 1;

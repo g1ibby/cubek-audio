@@ -1,0 +1,117 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "Cargo.lock"
+      - "**.rs"
+      - "**.yml"
+      - "**.toml"
+      - "!**.md"
+      - "!LICENSE-APACHE"
+      - "!LICENSE-MIT"
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - "Cargo.lock"
+      - "**.rs"
+      - "**.yml"
+      - "**.toml"
+      - "!**.md"
+      - "!LICENSE-APACHE"
+      - "!LICENSE-MIT"
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_PREVIOUS_VERSION: 1.92.0
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare-checks:
+    runs-on: ubuntu-24.04
+    outputs:
+      rust-prev-version: ${{ env.RUST_PREVIOUS_VERSION }}
+    steps:
+      - name: Do Nothing
+        if: false
+        run: echo
+
+  code-quality:
+    runs-on: ubuntu-24.04
+    needs: prepare-checks
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        run: rustup toolchain install stable --profile minimal --component rustfmt clippy
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-${{ runner.os }}-stable-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: cargo-${{ runner.os }}-stable-
+      - name: Format
+        env:
+          TERM: xterm-256color
+        run: cargo xtask check format
+      - name: Lint
+        run: cargo xtask check lint
+
+  documentation:
+    runs-on: ubuntu-24.04
+    needs: prepare-checks
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        run: rustup toolchain install stable --profile minimal
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-${{ runner.os }}-stable-docs-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: cargo-${{ runner.os }}-stable-docs-
+      - name: Documentation Build
+        run: cargo xtask doc build
+      - name: Documentation Tests
+        run: cargo xtask doc tests
+
+  linux-std-tests:
+    runs-on: ubuntu-24.04
+    needs: [prepare-checks, code-quality]
+    strategy:
+      matrix:
+        rust: [stable, prev]
+        include:
+          - rust: stable
+            toolchain: stable
+          - rust: prev
+            toolchain: ${{ needs.prepare-checks.outputs.rust-prev-version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        run: rustup toolchain install ${{ matrix.toolchain }} --profile minimal
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-${{ runner.os }}-${{ matrix.rust }}-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: cargo-${{ runner.os }}-${{ matrix.rust }}-
+      - name: Setup Linux runner
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+      - name: Tests
+        run: cargo xtask test --ci

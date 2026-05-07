@@ -125,7 +125,7 @@ impl<R: Runtime> Resampler<R> {
     /// Resample `signal` of shape `(batch, time)`.
     ///
     /// If `output_length` is `None`, the output is trimmed to
-    /// [`default_output_length`] (`floor` mode). Passing
+    /// [`Self::default_output_length`] (`floor` mode). Passing
     /// `Some(n)` crops to `n`; `n` must satisfy
     /// `n <= max_output_length(time)`.
     ///

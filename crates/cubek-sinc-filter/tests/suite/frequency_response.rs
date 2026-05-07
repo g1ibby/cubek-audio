@@ -8,9 +8,7 @@
 //! both of those are easy to assert without relying on a fragile absolute
 //! threshold.
 
-mod common;
-
-use common::{Runtime, client, dtype_f32, read_tensor, upload_2d};
+use super::common::{Runtime, client, dtype_f32, read_tensor, upload_2d};
 use cubek_sinc_filter::{FilterMode, LowPassFilterBank};
 
 fn pure_tone(n: usize, sample_rate: f32, freq: f32) -> Vec<f32> {

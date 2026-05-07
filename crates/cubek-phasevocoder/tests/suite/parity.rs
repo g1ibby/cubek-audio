@@ -9,9 +9,7 @@
 //! The CPU reference uses the same `rate == 1.0` short-circuit, so
 //! passing rate=1.0 through this suite also covers that branch.
 
-mod common;
-
-use common::{
+use super::common::{
     client, dtype_f32, max_abs_diff, peak_abs, phase_advance_default, phase_vocoder_cpu,
     read_tensor, synth_spectrogram, upload_1d, upload_3d,
 };

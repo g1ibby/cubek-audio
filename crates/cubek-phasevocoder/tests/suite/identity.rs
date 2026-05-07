@@ -11,11 +11,9 @@
 //!    any rate must leave that bin's magnitude unchanged and concentrate
 //!    the output in the same bin.
 
-mod common;
-
 use core::f32::consts::PI;
 
-use common::{
+use super::common::{
     client, dtype_f32, phase_advance_default, read_tensor, synth_spectrogram, upload_1d, upload_3d,
 };
 use cubek_phasevocoder::phase_vocoder;

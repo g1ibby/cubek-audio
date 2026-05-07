@@ -136,10 +136,10 @@ impl<R: Runtime> LowPassFilterBank<R> {
     fn fft_spectra_for(&self, time: usize) -> FftConvSpectra<R> {
         let n_fft = fft_n_for(time, self.filter_len as usize);
         let mut guard = self.fft_spectra.lock().expect("fft_spectra mutex poisoned");
-        if let Some(spectra) = guard.as_ref() {
-            if spectra.n_fft == n_fft {
-                return spectra.clone();
-            }
+        if let Some(spectra) = guard.as_ref()
+            && spectra.n_fft == n_fft
+        {
+            return spectra.clone();
         }
         let spectra = FftConvSpectra::build(
             &self.client,

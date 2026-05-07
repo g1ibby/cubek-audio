@@ -85,8 +85,8 @@ impl FilterBank {
         // to f32 after normalization.
         let filter_len_f = filter_len as f64;
         let mut hann = vec![0.0f64; filter_len as usize];
-        for n in 0..filter_len as usize {
-            hann[n] =
+        for (n, v) in hann.iter_mut().enumerate().take(filter_len as usize) {
+            *v =
                 0.5 * (1.0 - (2.0 * core::f64::consts::PI * n as f64 / (filter_len_f - 1.0)).cos());
         }
 

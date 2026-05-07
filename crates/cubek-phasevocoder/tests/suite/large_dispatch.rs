@@ -15,9 +15,7 @@
 //! is out of range, so `mag = |input[0]|`, `phase_acc =
 //! atan2(im[0], re[0])`, and the output bin is exactly `input[0]`.
 
-mod common;
-
-use common::{
+use super::common::{
     Runtime, client, dtype_f32, phase_advance_default, read_tensor, upload_1d, upload_3d,
 };
 use cubek_phasevocoder::phase_vocoder;

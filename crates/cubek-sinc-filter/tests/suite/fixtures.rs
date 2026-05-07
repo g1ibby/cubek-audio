@@ -25,9 +25,7 @@ use std::path::PathBuf;
 
 use cubek_sinc_filter::{FilterMode, LowPassFilterBank};
 
-mod common;
-
-use common::{
+use super::common::{
     Runtime, client, dtype_f32, max_abs_diff, peak_abs, read_tensor, upload_2d, upload_indices,
 };
 

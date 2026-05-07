@@ -181,6 +181,7 @@ fn pad_replicate_kernel<F: Float>(
 /// Pointwise multiply `(batch, n_freq)` spectrum by a per-row selected
 /// filter spectrum from `(n_cutoffs, n_freq)`. Output is complex
 /// `(batch, n_freq)`.
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn launch_pointwise_multiply_per_row<R: Runtime>(
     client: &ComputeClient<R>,
     sig_re: TensorHandle<R>,
@@ -246,6 +247,7 @@ fn pointwise_multiply_per_row_kernel<F: Float>(
 /// Pointwise multiply with a single filter index (the `apply_single`
 /// variant). Kept separate so we don't allocate a tiny (batch,) indices
 /// tensor just to encode a constant.
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn launch_pointwise_multiply_single<R: Runtime>(
     client: &ComputeClient<R>,
     sig_re: TensorHandle<R>,

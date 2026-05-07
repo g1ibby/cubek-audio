@@ -7,10 +7,8 @@
 //! path matches this closed form is the cheapest end-to-end test we
 //! have — no external dependency, no FFT in the critical path.
 
-mod common;
-
-use common::{
-    build_kernel_bank, client, dtype_f32, max_abs_diff, peak_abs, read_tensor, upload_2d,
+use super::common::{
+    Runtime, build_kernel_bank, client, dtype_f32, max_abs_diff, peak_abs, read_tensor, upload_2d,
 };
 use cubek_resample::Resampler;
 
@@ -28,8 +26,7 @@ fn run_impulse(old_sr: u32, new_sr: u32, impulse_pos: usize, time: usize) {
     let signal_t = upload_2d(&client, &signal, 1, time);
 
     // Run through the GPU Resampler.
-    let resampler =
-        Resampler::<common::Runtime>::new(client.clone(), old_sr, new_sr, 24, 0.945, dtype);
+    let resampler = Resampler::<Runtime>::new(client.clone(), old_sr, new_sr, 24, 0.945, dtype);
     let out_t = resampler.apply(signal_t, None);
     let actual = read_tensor(&client, out_t);
 

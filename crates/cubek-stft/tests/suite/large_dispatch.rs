@@ -19,9 +19,7 @@
 //! Correctness check: rectangular window + all-ones signal → every frame's
 //! DFT is `[n_fft, 0, 0, ..., 0]` because `sum(1) = n_fft`.
 
-mod common;
-
-use common::{Runtime, client, dtype_f32, read_tensor, upload_1d, upload_2d};
+use super::common::{Runtime, client, dtype_f32, read_tensor, upload_1d, upload_2d};
 use cubecl::std::tensor::TensorHandle;
 use cubek_stft::stft;
 

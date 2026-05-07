@@ -11,9 +11,7 @@
 //! This matches how librosa / torchaudio document their STFT round-trip
 //! guarantees.
 
-mod common;
-
-use common::{
+use super::common::{
     client, dtype_f32, max_abs_diff, peak_abs, read_tensor, synthesize_signal, upload_1d, upload_2d,
 };
 use cubek_stft::window::hann_window_periodic;

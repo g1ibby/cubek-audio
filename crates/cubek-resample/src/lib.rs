@@ -9,7 +9,7 @@
 //! Replicate-pad the input on both ends, then for every output sample
 //! `t = j*new_sr + i` the result is `Σ_k padded[j*old_sr + k] * kernel[i, k]`.
 //! The conv + interleave happens in one [`cubecl`] kernel (one thread per
-//! output sample). Kernel tables are built host-side in [`kernels`] once
+//! output sample). Kernel tables are built host-side in the kernel-bank builder once
 //! and uploaded at [`Resampler::new`] time — never rebuilt per batch.
 //!
 //! ## Quick usage
@@ -33,7 +33,7 @@
 //! ## What's in this crate
 //!
 //! * [`Resampler`] — polyphase FIR resampler over `cubecl::Runtime`.
-//! * [`kernels`] — host-side kernel-bank builder.
+//! * `kernels` — host-side kernel-bank builder.
 //! * [`fast_shifts`] — integer-ratio pitch-shift enumeration. Pure host
 //!   code, no dependency on the GPU path.
 

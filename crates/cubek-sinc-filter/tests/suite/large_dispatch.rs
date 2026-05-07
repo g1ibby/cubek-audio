@@ -11,9 +11,7 @@
 //! filter with the bank's DC-normalized weights unchanged. Spot-check a
 //! handful of output samples that straddle the 65535-cube boundary.
 
-mod common;
-
-use common::{Runtime, client, dtype_f32, read_tensor, upload_2d};
+use super::common::{Runtime, client, dtype_f32, read_tensor, upload_2d};
 use cubek_sinc_filter::{FilterMode, LowPassFilterBank};
 
 const BATCH: usize = 1;

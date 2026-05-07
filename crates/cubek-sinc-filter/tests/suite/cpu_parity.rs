@@ -8,9 +8,7 @@
 //! paths compute the same dot product but the GPU may reassociate it via
 //! `fma`.
 
-mod common;
-
-use common::{
+use super::common::{
     Runtime, client, dtype_f32, lowpass_cpu, max_abs_diff, peak_abs, read_tensor, synth_reals,
     upload_2d, upload_indices,
 };
