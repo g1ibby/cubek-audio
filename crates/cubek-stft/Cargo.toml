@@ -1,0 +1,35 @@
+[package]
+name = "cubek-stft"
+categories = ["multimedia::audio", "science", "algorithms"]
+description = "Short-time Fourier transform kernels built on cubek-fft"
+edition.workspace = true
+keywords = ["audio", "stft", "fft", "gpu", "cubecl"]
+license.workspace = true
+readme.workspace = true
+repository.workspace = true
+version.workspace = true
+
+[features]
+default = ["std"]
+std = ["cubecl/std", "cubek-fft/std"]
+
+# Test-only backend selectors. Pick exactly one at `cargo test` time:
+#   cargo test --features test-metal   (Apple Silicon)
+#   cargo test --features test-cuda    (Linux NVIDIA, needs CUDA Toolkit)
+#   cargo test --features test-vulkan  (Linux AMD / fallback)
+#   cargo test --features test-cpu     (sanity runs, no GPU required)
+test-metal  = ["cubecl/wgpu-msl"]
+test-vulkan = ["cubecl/wgpu-spirv"]
+test-cuda   = ["cubecl/cuda"]
+test-cpu    = ["cubecl/cpu"]
+
+[dependencies]
+cubecl = { workspace = true }
+cubek-fft = { workspace = true }
+
+[dev-dependencies]
+# `test-runtime` activates cubecl::TestRuntime scaffolding; the actual
+# backend is chosen by --features test-{metal,vulkan,cuda,cpu} above.
+cubecl = { workspace = true, features = ["std", "stdlib", "test-runtime"] }
+rustfft = { workspace = true }
+bytemuck = { workspace = true }
