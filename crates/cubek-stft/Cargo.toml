@@ -12,6 +12,7 @@ version.workspace = true
 [features]
 default = ["std"]
 std = ["cubecl/std", "cubek-fft/std"]
+heavy = []
 
 # Test-only backend selectors. Pick exactly one at `cargo test` time:
 #   cargo test --features test-metal   (Apple Silicon)

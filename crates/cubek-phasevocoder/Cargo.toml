@@ -15,6 +15,7 @@ version.workspace = true
 # we depend on neither so we enable it directly.
 default = ["std"]
 std = ["cubecl/std", "cubecl/stdlib"]
+heavy = []
 
 # Test-only backend selectors. Pick exactly one at `cargo test` time:
 #   cargo test --features test-metal   (Apple Silicon)
