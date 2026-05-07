@@ -25,25 +25,14 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
-  RUST_PREVIOUS_VERSION: 1.92.0
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  prepare-checks:
-    runs-on: ubuntu-24.04
-    outputs:
-      rust-prev-version: ${{ env.RUST_PREVIOUS_VERSION }}
-    steps:
-      - name: Do Nothing
-        if: false
-        run: echo
-
   code-quality:
     runs-on: ubuntu-24.04
-    needs: prepare-checks
     steps:
       - uses: actions/checkout@v4
       - name: Setup Rust
@@ -66,7 +55,6 @@ jobs:
 
   documentation:
     runs-on: ubuntu-24.04
-    needs: prepare-checks
     steps:
       - uses: actions/checkout@v4
       - name: Setup Rust
@@ -87,19 +75,11 @@ jobs:
 
   linux-std-tests:
     runs-on: ubuntu-24.04
-    needs: [prepare-checks, code-quality]
-    strategy:
-      matrix:
-        rust: [stable, prev]
-        include:
-          - rust: stable
-            toolchain: stable
-          - rust: prev
-            toolchain: ${{ needs.prepare-checks.outputs.rust-prev-version }}
+    needs: code-quality
     steps:
       - uses: actions/checkout@v4
       - name: Setup Rust
-        run: rustup toolchain install ${{ matrix.toolchain }} --profile minimal
+        run: rustup toolchain install stable --profile minimal
       - name: Cache Cargo
         uses: actions/cache@v4
         with:
@@ -107,8 +87,8 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target
-          key: cargo-${{ runner.os }}-${{ matrix.rust }}-${{ hashFiles('**/Cargo.toml') }}
-          restore-keys: cargo-${{ runner.os }}-${{ matrix.rust }}-
+          key: cargo-${{ runner.os }}-stable-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: cargo-${{ runner.os }}-stable-
       - name: Setup Linux runner
         run: |
           sudo apt-get update
